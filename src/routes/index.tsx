@@ -1,20 +1,10 @@
-import { Title } from "@solidjs/meta";
-import { createAsync, query } from "@solidjs/router";
-import Counter from "~/components/Counter";
+import { createAsync, query, RouteDefinition } from "@solidjs/router";
+import Card from "~/components/Card";
 import jsdom from "jsdom";
-
-type EDHRecCommander = {
-    name: string;
-    sanitized: string;
-    sanitized_wo: string;
-    url: string;
-    inclusion: number;
-    label: string;
-    num_decks: number;
-};
+import { For, Suspense } from "solid-js";
+import type {EDHRecCommander, ScryfallCommander} from "~/types"
 
 const NUM_COMMANDERS = 100;
-const MAX_SCRYFALL = 75;
 
 const fetchCommanders = query(async () => {
     "use server";
@@ -79,30 +69,30 @@ const fetchCommanders = query(async () => {
     );
     const cardsSecond = await cardsSecondReq.json();
 
-    const cards = [...cardsFirst.data, ...cardsSecond.data];
+    const cards: ScryfallCommander[] = [
+        ...cardsFirst.data,
+        ...cardsSecond.data,
+    ];
 
     return cards;
 }, "commanders");
 
+export const route = {
+    preload: () => fetchCommanders(),
+} satisfies RouteDefinition;
+
 export default function Home() {
     const commanders = createAsync(() => fetchCommanders());
 
-    if (commanders()) {
-        return <img src={commanders()[0].image_uris.normal} />
-    }
-
     return (
-        <main>
-            <Title>Hello World</Title>
-            <h1>Hello world!</h1>
-            <Counter />
-            <p>
-                Visit{" "}
-                <a href="https://start.solidjs.com" target="_blank">
-                    start.solidjs.com
-                </a>{" "}
-                to learn how to build SolidStart apps.
-            </p>
-        </main>
+        <>
+            <Suspense fallback="Loading...">
+                <div class="card-grid">
+                    <For each={commanders()}>
+                        {(commander) => <Card data={commander} />}
+                    </For>
+                </div>
+            </Suspense>
+        </>
     );
 }
