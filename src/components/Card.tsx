@@ -1,6 +1,7 @@
 import type { ScryfallCommander } from "~/types";
 import "./Card.css";
 import { createSignal } from "solid-js";
+import CardPreview from "./CardPreview";
 
 export default function Card(props: { data: ScryfallCommander; id: number }) {
     const [isFlipped, setIsFlipped] = createSignal(false);
@@ -29,34 +30,35 @@ export default function Card(props: { data: ScryfallCommander; id: number }) {
 
     const updateMousePosition = (e: MouseEvent) => {
         // Calculate preview position with offset to avoid going off-screen
+        // Preview now includes image + info section, so it's taller
         const isMobile = window.innerWidth <= 768;
         const previewWidth = isMobile ? 250 : 350;
-        const previewHeight = isMobile ? 350 : 490;
+        const previewHeight = isMobile ? 450 : 650; // Increased to account for info section
         const offset = 20;
-        
+
         let x = e.clientX + offset;
         let y = e.clientY + offset;
-        
+
         // Adjust if preview would go off right edge
         if (x + previewWidth > window.innerWidth) {
             x = e.clientX - previewWidth - offset;
         }
-        
+
         // Adjust if preview would go off bottom edge
         if (y + previewHeight > window.innerHeight) {
             y = e.clientY - previewHeight - offset;
         }
-        
+
         // Adjust if preview would go off left edge
         if (x < 0) {
             x = offset;
         }
-        
+
         // Adjust if preview would go off top edge
         if (y < 0) {
             y = offset;
         }
-        
+
         setMousePosition({ x, y });
     };
 
@@ -66,7 +68,8 @@ export default function Card(props: { data: ScryfallCommander; id: number }) {
     if (commander.card_faces) {
         const frontImage1 = commander.card_faces[0]?.image_uris?.large ?? "";
         const frontImage2 = commander.card_faces[1]?.image_uris?.large ?? "";
-        const backImage = "https://static.wikia.nocookie.net/mtgsalvation_gamepedia/images/f/f8/Magic_card_back.jpg";
+        const backImage =
+            "https://static.wikia.nocookie.net/mtgsalvation_gamepedia/images/f/f8/Magic_card_back.jpg";
 
         return (
             <>
@@ -88,14 +91,18 @@ export default function Card(props: { data: ScryfallCommander; id: number }) {
                                 <img
                                     src={frontImage2}
                                     alt="Front of card"
-                                    onMouseEnter={() => setPreviewImage(frontImage2)}
+                                    onMouseEnter={() =>
+                                        setPreviewImage(frontImage2)
+                                    }
                                 />
                             </div>
                             <div class="back">
                                 <img
                                     src={backImage}
                                     alt="Back of card"
-                                    onMouseEnter={() => setPreviewImage(frontImage2)}
+                                    onMouseEnter={() =>
+                                        setPreviewImage(frontImage2)
+                                    }
                                 />
                             </div>
                         </div>
@@ -111,14 +118,18 @@ export default function Card(props: { data: ScryfallCommander; id: number }) {
                                 <img
                                     src={frontImage1}
                                     alt="Front of card"
-                                    onMouseEnter={() => setPreviewImage(frontImage1)}
+                                    onMouseEnter={() =>
+                                        setPreviewImage(frontImage1)
+                                    }
                                 />
                             </div>
                             <div class="back">
                                 <img
                                     src={backImage}
                                     alt="Back of card"
-                                    onMouseEnter={() => setPreviewImage(frontImage1)}
+                                    onMouseEnter={() =>
+                                        setPreviewImage(frontImage1)
+                                    }
                                 />
                             </div>
                         </div>
@@ -141,7 +152,8 @@ export default function Card(props: { data: ScryfallCommander; id: number }) {
 
     if (commander.image_uris) {
         const frontImage = commander.image_uris.large;
-        const backImage = "https://static.wikia.nocookie.net/mtgsalvation_gamepedia/images/f/f8/Magic_card_back.jpg";
+        const backImage =
+            "https://static.wikia.nocookie.net/mtgsalvation_gamepedia/images/f/f8/Magic_card_back.jpg";
 
         return (
             <>
@@ -172,15 +184,12 @@ export default function Card(props: { data: ScryfallCommander; id: number }) {
                     </div>
                 </div>
                 {isHovered() && previewImage() && (
-                    <div
-                        class="card-preview"
-                        style={{
-                            left: `${mousePosition().x}px`,
-                            top: `${mousePosition().y}px`,
-                        }}
-                    >
-                        <img src={previewImage()!} alt="Card preview" />
-                    </div>
+                    <CardPreview
+                        mouseX={mousePosition().x}
+                        mouseY={mousePosition().y}
+                        commander={commander}
+                        src={previewImage()!}
+                    />
                 )}
             </>
         );

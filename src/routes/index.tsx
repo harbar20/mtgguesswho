@@ -9,7 +9,7 @@ export default function Home() {
                     <h1 class="main-title">
                         MTG Guess Who
                     </h1>
-                    <p class="subtitle">Click cards to hid commanders</p>
+                    <p class="subtitle">Click cards to hide commanders</p>
                 </div>
             </header>
             <main class="main-content">

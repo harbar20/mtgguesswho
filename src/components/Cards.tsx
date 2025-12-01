@@ -31,6 +31,13 @@ const fetchCommanders = query(async () => {
 
     const commanders: EDHRecCommander[] =
         fin.props.pageProps.data.container.json_dict.cardlists[0].cardviews;
+
+    // Create a map of commander name to EDHRec rank (1-indexed)
+    const edhrecRankMap = new Map<string, number>();
+    commanders.forEach((c, index) => {
+        edhrecRankMap.set(c.name, index + 1);
+    });
+
     const partnerCommanderNames: { name: string }[] = [];
     const partnerNames: string[] = [];
     const commanderNames = commanders.map((c) => {
@@ -99,16 +106,25 @@ const fetchCommanders = query(async () => {
     const doubleCardFaces: ScryfallCardFace[] = partnerCards.data;
     const cardsThird: ScryfallCommander[] = [];
     for (let i = 0; i < doubleCardFaces.length; i += 2) {
+        const partnerName = partnerNames[Math.floor(i / 2)];
         cardsThird.push({
             ...partnerCards.data[i],
-            name: partnerNames[i],
+            name: partnerName,
             card_faces: [doubleCardFaces[i], doubleCardFaces[i + 1]],
+            edhrec_rank: edhrecRankMap.get(partnerName),
         });
     }
 
+    // Assign EDHRec ranks to all cards based on the original order
     const cards: ScryfallCommander[] = [
-        ...cardsFirst.data,
-        ...cardsSecond.data,
+        ...cardsFirst.data.map((card: ScryfallCommander) => ({
+            ...card,
+            edhrec_rank: edhrecRankMap.get(card.name),
+        })),
+        ...cardsSecond.data.map((card: ScryfallCommander) => ({
+            ...card,
+            edhrec_rank: edhrecRankMap.get(card.name),
+        })),
         ...cardsThird,
     ];
 
