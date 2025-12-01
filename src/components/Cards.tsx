@@ -132,7 +132,10 @@ const fetchCommanders = query(async () => {
             ...card,
             edhrec_rank: edhrecRankMap.get(card.name),
         })),
-        ...cardsThird,
+        ...cardsThird.map((card: ScryfallCommander) => ({
+            ...card,
+            edhrec_rank: edhrecRankMap.get(card.name),
+        })),
     ];
 
     // Cache the results
@@ -168,14 +171,6 @@ export default function Cards() {
     const commanders = commandersFunc();
 
     if (!commanders) {
-        // return (
-        //     <div class="error-container">
-        //         <div class="error-icon">⚠️</div>
-        //         <p class="error-message">
-        //             Unable to load commanders. Please try again later.
-        //         </p>
-        //     </div>
-        // );
         return;
     }
 

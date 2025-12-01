@@ -66,8 +66,17 @@ export default function Card(props: { data: ScryfallCommander; id: number }) {
 
     // If commander has 2 faces
     if (commander.card_faces) {
-        const frontImage1 = commander.card_faces[0]?.image_uris?.large ?? "";
-        const frontImage2 = commander.card_faces[1]?.image_uris?.large ?? "";
+        // Use png for highest quality, fallback to border_crop, then large
+        const frontImage1 =
+            commander.card_faces[0]?.image_uris?.png ??
+            commander.card_faces[0]?.image_uris?.border_crop ??
+            commander.card_faces[0]?.image_uris?.large ??
+            "";
+        const frontImage2 =
+            commander.card_faces[1]?.image_uris?.png ??
+            commander.card_faces[1]?.image_uris?.border_crop ??
+            commander.card_faces[1]?.image_uris?.large ??
+            "";
         const backImage =
             "https://static.wikia.nocookie.net/mtgsalvation_gamepedia/images/f/f8/Magic_card_back.jpg";
 
@@ -136,22 +145,23 @@ export default function Card(props: { data: ScryfallCommander; id: number }) {
                     </div>
                 </div>
                 {isHovered() && previewImage() && (
-                    <div
-                        class="card-preview"
-                        style={{
-                            left: `${mousePosition().x}px`,
-                            top: `${mousePosition().y}px`,
-                        }}
-                    >
-                        <img src={previewImage()!} alt="Card preview" />
-                    </div>
+                    <CardPreview
+                        mouseX={mousePosition().x}
+                        mouseY={mousePosition().y}
+                        commander={commander}
+                        src={previewImage()!}
+                    />
                 )}
             </>
         );
     }
 
     if (commander.image_uris) {
-        const frontImage = commander.image_uris.large;
+        // Use png for highest quality, fallback to border_crop, then large
+        const frontImage =
+            commander.image_uris.png ??
+            commander.image_uris.border_crop ??
+            commander.image_uris.large;
         const backImage =
             "https://static.wikia.nocookie.net/mtgsalvation_gamepedia/images/f/f8/Magic_card_back.jpg";
 
