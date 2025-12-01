@@ -1,5 +1,5 @@
 import { createAsync, query } from "@solidjs/router";
-import { createSignal, onMount, For } from "solid-js";
+import { createSignal, For, onMount } from "solid-js";
 import jsdom from "jsdom";
 import { EDHRecCommander, ScryfallCardFace, ScryfallCommander } from "~/types";
 import Card from "./Card";
@@ -132,7 +132,9 @@ const fetchCommanders = query(async () => {
 }, "commanders");
 
 function shuffleArray<T>(array: T[]): T[] {
-    let currentIndex = array.length;
+    // Create a copy to avoid mutating the original array
+    const shuffled = [...array];
+    let currentIndex = shuffled.length;
     let randomIndex: number;
 
     // While there remain elements to shuffle.
@@ -142,13 +144,13 @@ function shuffleArray<T>(array: T[]): T[] {
         currentIndex--;
 
         // And swap it with the current element.
-        [array[currentIndex], array[randomIndex]] = [
-            array[randomIndex],
-            array[currentIndex],
+        [shuffled[currentIndex], shuffled[randomIndex]] = [
+            shuffled[randomIndex],
+            shuffled[currentIndex],
         ];
     }
 
-    return array;
+    return shuffled;
 }
 
 export default function Cards() {
@@ -156,21 +158,25 @@ export default function Cards() {
     const commanders = commandersFunc();
 
     if (!commanders) {
-        return (
-            <div class="error-container">
-                <div class="error-icon">⚠️</div>
-                <p class="error-message">
-                    Unable to load commanders. Please try again later.
-                </p>
-            </div>
-        );
+        // return (
+        //     <div class="error-container">
+        //         <div class="error-icon">⚠️</div>
+        //         <p class="error-message">
+        //             Unable to load commanders. Please try again later.
+        //         </p>
+        //     </div>
+        // );
+        return;
     }
 
-    const [displayedCards, setDisplayedCards] =
-        createSignal<ScryfallCommander[]>(commanders);
+    // Start with original order for SSR/hydration
+    const [displayedCards, setDisplayedCards] = createSignal<
+        ScryfallCommander[]
+    >([...commanders]);
 
+    // Shuffle only on client side after mount to avoid hydration mismatch
     onMount(() => {
-        setDisplayedCards(shuffleArray(commanders));
+        setDisplayedCards(shuffleArray([...commanders]));
     });
 
     return (
