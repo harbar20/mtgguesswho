@@ -25,7 +25,6 @@ export default function Card(props: { data: ScryfallCommander; id: number }) {
 
     const handleMouseLeave = () => {
         setIsHovered(false);
-        setPreviewImage(null);
     };
 
     const updateMousePosition = (e: MouseEvent) => {
@@ -61,10 +60,6 @@ export default function Card(props: { data: ScryfallCommander; id: number }) {
         setMousePosition({ x, y });
     };
 
-    const handleImageHover = (imageUrl: string) => {
-        setPreviewImage(imageUrl);
-    };
-
     const commander = props.data;
 
     // If commander has 2 faces
@@ -93,14 +88,14 @@ export default function Card(props: { data: ScryfallCommander; id: number }) {
                                 <img
                                     src={frontImage2}
                                     alt="Front of card"
-                                    onMouseEnter={() => handleImageHover(frontImage2)}
+                                    onMouseEnter={() => setPreviewImage(frontImage2)}
                                 />
                             </div>
                             <div class="back">
                                 <img
                                     src={backImage}
                                     alt="Back of card"
-                                    onMouseEnter={() => handleImageHover(backImage)}
+                                    onMouseEnter={() => setPreviewImage(frontImage2)}
                                 />
                             </div>
                         </div>
@@ -116,14 +111,14 @@ export default function Card(props: { data: ScryfallCommander; id: number }) {
                                 <img
                                     src={frontImage1}
                                     alt="Front of card"
-                                    onMouseEnter={() => handleImageHover(frontImage1)}
+                                    onMouseEnter={() => setPreviewImage(frontImage1)}
                                 />
                             </div>
                             <div class="back">
                                 <img
                                     src={backImage}
                                     alt="Back of card"
-                                    onMouseEnter={() => handleImageHover(backImage)}
+                                    onMouseEnter={() => setPreviewImage(frontImage1)}
                                 />
                             </div>
                         </div>
@@ -164,14 +159,14 @@ export default function Card(props: { data: ScryfallCommander; id: number }) {
                             <img
                                 src={frontImage}
                                 alt="Front of card"
-                                onMouseEnter={() => handleImageHover(frontImage)}
+                                onMouseEnter={() => setPreviewImage(frontImage)}
                             />
                         </div>
                         <div class="back">
                             <img
                                 src={backImage}
                                 alt="Back of card"
-                                onMouseEnter={() => handleImageHover(backImage)}
+                                onMouseEnter={() => setPreviewImage(frontImage)}
                             />
                         </div>
                     </div>
