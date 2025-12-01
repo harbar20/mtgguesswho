@@ -3,11 +3,18 @@ import { createSignal, For, onMount } from "solid-js";
 import jsdom from "jsdom";
 import { EDHRecCommander, ScryfallCardFace, ScryfallCommander } from "~/types";
 import Card from "./Card";
+import { getCachedCommanders, setCachedCommanders } from "~/utils/cache";
 
 const NUM_COMMANDERS = 100;
 
 const fetchCommanders = query(async () => {
     "use server";
+
+    // Check cache first
+    const cached = await getCachedCommanders();
+    if (cached) {
+        return cached;
+    }
 
     // Getting top 100 commanders from EDHREC
     const response = await fetch("https://edhrec.com/commanders");
@@ -127,6 +134,9 @@ const fetchCommanders = query(async () => {
         })),
         ...cardsThird,
     ];
+
+    // Cache the results
+    await setCachedCommanders(cards);
 
     return cards;
 }, "commanders");
