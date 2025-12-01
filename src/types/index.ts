@@ -8,6 +8,29 @@ export type EDHRecCommander = {
     num_decks: number;
 };
 
+export type ScryfallCardFace = {
+    object: "card_face";
+    name: string;
+    mana_cost: string;
+    type_line: string;
+    oracle_text: string;
+    colors: string[];
+    power?: string;
+    toughness?: string;
+    flavor_text?: string;
+    artist: string;
+    artist_id: string;
+    illustration_id?: string;
+    image_uris?: {
+        small: string;
+        normal: string;
+        large: string;
+        png: string;
+        art_crop: string;
+        border_crop: string;
+    };
+};
+
 export type ScryfallCommander = {
     object: string;
     id: string;
@@ -25,28 +48,7 @@ export type ScryfallCommander = {
     layout: string;
     highres_image: boolean;
     image_status: string;
-    card_faces?: {
-        object: "card_face";
-        name: string;
-        mana_cost: string;
-        type_line: string;
-        oracle_text: string;
-        colors: string[];
-        power?: string;
-        toughness?: string;
-        flavor_text?: string;
-        artist: string;
-        artist_id: string;
-        illustration_id?: string;
-        image_uris?: {
-            small: string;
-            normal: string;
-            large: string;
-            png: string;
-            art_crop: string;
-            border_crop: string;
-        };
-    };
+    card_faces?: ScryfallCardFace[];
     image_uris?: {
         small: string;
         normal: string;
