@@ -167,7 +167,10 @@ function shuffleArray<T>(array: T[]): T[] {
 }
 
 export default function Cards() {
-    const commandersFunc = createAsync(() => fetchCommanders());
+    const commandersFunc = createAsync(() => fetchCommanders(), {
+        initialValue: [],
+        deferStream: true,
+    });
     const commanders = commandersFunc();
 
     if (!commanders) {
