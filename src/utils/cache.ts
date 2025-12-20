@@ -14,6 +14,7 @@ interface CacheData {
 export async function getCachedCommanders(): Promise<
     ScryfallCommander[] | null
 > {
+    "use server";
     try {
         // Check if cache file exists
         await fs.access(CACHE_FILE);
@@ -41,6 +42,7 @@ export async function getCachedCommanders(): Promise<
 export async function setCachedCommanders(
     data: ScryfallCommander[]
 ): Promise<void> {
+    "use server";
     try {
         // Ensure cache directory exists
         await fs.mkdir(CACHE_DIR, { recursive: true });

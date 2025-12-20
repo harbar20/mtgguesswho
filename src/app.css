@@ -1,7 +1,13 @@
+/* Beleren Bold */
 @font-face {
-    font-family: beleren-bold; /* set name */
-    src: url(Beleren2016-Bold.ttf); /* url of the font */
-  }
+    font-family: "Beleren Bold";
+    src: url("./assets/fonts/Beleren2016-Bold.woff") format("woff"),
+        url("./assets/fonts/Beleren2016-Bold.ttf") format("truetype"),
+        url("./assets/fonts/Beleren2016-Bold.svg#Beleren2016-Bold") format("svg");
+    font-style: normal;
+    font-weight: bold;
+    text-rendering: optimizeLegibility;
+}
 
 * {
     margin: 0;
@@ -24,7 +30,7 @@
 }
 
 body {
-    font-family: beleren-bold;
+    font-family: "Beleren Bold", sans-serif;
     background: var(--bg-primary);
     background-attachment: fixed;
     color: var(--text-primary);
