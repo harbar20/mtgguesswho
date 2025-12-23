@@ -103,6 +103,7 @@ export default function Card(props: { data: ScryfallCommander; id: number }) {
                                     onMouseEnter={() =>
                                         setPreviewImage(frontImage2)
                                     }
+                                    loading="lazy"
                                 />
                             </div>
                             <div class="back">
@@ -112,6 +113,7 @@ export default function Card(props: { data: ScryfallCommander; id: number }) {
                                     onMouseEnter={() =>
                                         setPreviewImage(frontImage2)
                                     }
+                                    loading="lazy"
                                 />
                             </div>
                         </div>
@@ -130,6 +132,7 @@ export default function Card(props: { data: ScryfallCommander; id: number }) {
                                     onMouseEnter={() =>
                                         setPreviewImage(frontImage1)
                                     }
+                                    loading="lazy"
                                 />
                             </div>
                             <div class="back">
@@ -139,6 +142,7 @@ export default function Card(props: { data: ScryfallCommander; id: number }) {
                                     onMouseEnter={() =>
                                         setPreviewImage(frontImage1)
                                     }
+                                    loading="lazy"
                                 />
                             </div>
                         </div>
@@ -182,6 +186,7 @@ export default function Card(props: { data: ScryfallCommander; id: number }) {
                                 src={frontImage}
                                 alt="Front of card"
                                 onMouseEnter={() => setPreviewImage(frontImage)}
+                                loading="lazy"
                             />
                         </div>
                         <div class="back">
@@ -189,6 +194,7 @@ export default function Card(props: { data: ScryfallCommander; id: number }) {
                                 src={backImage}
                                 alt="Back of card"
                                 onMouseEnter={() => setPreviewImage(frontImage)}
+                                loading="lazy"
                             />
                         </div>
                     </div>

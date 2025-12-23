@@ -144,52 +144,17 @@ const fetchCommanders = query(async () => {
     return cards;
 }, "commanders");
 
-function shuffleArray<T>(array: T[]): T[] {
-    // Create a copy to avoid mutating the original array
-    const shuffled = [...array];
-    let currentIndex = shuffled.length;
-    let randomIndex: number;
-
-    // While there remain elements to shuffle.
-    while (currentIndex !== 0) {
-        // Pick a remaining element.
-        randomIndex = Math.floor(Math.random() * currentIndex);
-        currentIndex--;
-
-        // And swap it with the current element.
-        [shuffled[currentIndex], shuffled[randomIndex]] = [
-            shuffled[randomIndex],
-            shuffled[currentIndex],
-        ];
-    }
-
-    return shuffled;
-}
-
 export default function Cards() {
-    const commandersFunc = createAsync(() => fetchCommanders(), {
-        initialValue: [],
-        deferStream: true,
-    });
+    const commandersFunc = createAsync(() => fetchCommanders());
     const commanders = commandersFunc();
 
     if (!commanders) {
         return;
     }
 
-    // Start with original order for SSR/hydration
-    const [displayedCards, setDisplayedCards] = createSignal<
-        ScryfallCommander[]
-    >([...commanders]);
-
-    // Shuffle only on client side after mount to avoid hydration mismatch
-    onMount(() => {
-        setDisplayedCards(shuffleArray([...commanders]));
-    });
-
     return (
         <div class="card-grid">
-            <For each={displayedCards()}>
+            <For each={commanders}>
                 {(commander, index) => <Card data={commander} id={index()} />}
             </For>
         </div>
