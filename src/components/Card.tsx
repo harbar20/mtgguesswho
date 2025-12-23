@@ -66,9 +66,9 @@ export default function Card(props: { data: ScryfallCommander; id: number }) {
 
     // If commander has 2 faces
     if (commander.card_faces) {
-        // Use png for highest quality, fallback to border_crop, then large
-        const frontImage1 = commander.card_faces[0]?.image_uris?.large ?? "";
-        const frontImage2 = commander.card_faces[1]?.image_uris?.large ?? "";
+        // Use png for highest quality, fallback to border_crop, then border_crop
+        const frontImage1 = commander.card_faces[0]?.image_uris?.border_crop ?? "";
+        const frontImage2 = commander.card_faces[1]?.image_uris?.border_crop ?? "";
         const backImage =
             "https://static.wikia.nocookie.net/mtgsalvation_gamepedia/images/f/f8/Magic_card_back.jpg";
 
@@ -163,7 +163,7 @@ export default function Card(props: { data: ScryfallCommander; id: number }) {
 
     if (commander.image_uris) {
         // Use png for highest quality, fallback to border_crop, then large
-        const frontImage = commander.image_uris.large;
+        const frontImage = commander.image_uris.border_crop;
         const backImage =
             "https://static.wikia.nocookie.net/mtgsalvation_gamepedia/images/f/f8/Magic_card_back.jpg";
 
